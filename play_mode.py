@@ -6,9 +6,20 @@ from sdl2 import SDL_GetKeyboardState, SDL_GetScancodeFromKey
 import game_framework
 import game_world
 import title_mode
+from ball import LARGE_BALL_SIZE, SMALL_BALL_SIZE
 from boy import Boy
 from grass import Grass
 from item_mode import ItemMode
+
+
+ITEM_BALL_SIZES = {
+    SDLK_0: None,
+    SDLK_1: SMALL_BALL_SIZE,
+    SDLK_2: LARGE_BALL_SIZE,
+    SDLK_KP_0: None,
+    SDLK_KP_1: SMALL_BALL_SIZE,
+    SDLK_KP_2: LARGE_BALL_SIZE,
+}
 
 
 def handle_events():
@@ -26,6 +37,10 @@ def handle_events():
             return
         if event.type == SDL_KEYDOWN and event.key == SDLK_i:
             item_mode.toggle()
+            continue
+        if (event.type == SDL_KEYDOWN and item_mode.is_open
+                and event.key in ITEM_BALL_SIZES):
+            boy.ball_size = ITEM_BALL_SIZES[event.key]
             continue
         boy.handle_event(event)
 
